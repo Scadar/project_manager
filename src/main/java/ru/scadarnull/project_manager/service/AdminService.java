@@ -20,9 +20,7 @@ public class AdminService {
     private PasswordEncoder passwordEncoder;
 
     public boolean addUser(User user){
-        User userFromDb = adminRepo.findByName(user.getUsername());
-
-        if(userFromDb != null){
+        if(isExist(user)){
             return false;
         }
         user.setRoles(Collections.singleton(Role.USER));
@@ -41,5 +39,10 @@ public class AdminService {
 
     public void updateUser(User user) {
         adminRepo.save(user);
+    }
+
+    public boolean isExist(User user){
+        User userFromDb = adminRepo.findByName(user.getUsername());
+        return userFromDb != null;
     }
 }
