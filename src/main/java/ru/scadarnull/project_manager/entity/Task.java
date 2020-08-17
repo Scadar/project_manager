@@ -3,6 +3,9 @@ package ru.scadarnull.project_manager.entity;
 import lombok.Data;
 
 import javax.persistence.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
@@ -14,13 +17,16 @@ public class Task {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @Size(min = 3, max = 30)
     private String name;
+
+    @Max(value = 200)
     private String description;
-    private BigDecimal estimatedCosts;
+
     private LocalDate actualEndTime;
 
-
     @Enumerated(EnumType.STRING)
+    @NotNull
     private State state;
 
     @ManyToOne

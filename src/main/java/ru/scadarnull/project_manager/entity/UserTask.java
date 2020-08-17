@@ -3,6 +3,7 @@ package ru.scadarnull.project_manager.entity;
 import lombok.Data;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 @Entity
@@ -13,6 +14,7 @@ public class UserTask {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @NotNull
     private LocalDate time;
 
     @ManyToOne

@@ -3,6 +3,7 @@ package ru.scadarnull.project_manager.entity;
 import lombok.Data;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Data
@@ -18,7 +19,8 @@ public class UserProject {
 
     @ManyToOne
     private User user;
-
+    @NotNull
     private Boolean isActive;
+    @NotNull
     private String teamRole;
 }
