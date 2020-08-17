@@ -24,7 +24,7 @@ public class User implements UserDetails {
 
     @Size(min = 3, max = 30)
     private String name;
-    @Min(value = 3)
+    @NotNull
     private String password;
     @NotNull
     private BigDecimal salary;
