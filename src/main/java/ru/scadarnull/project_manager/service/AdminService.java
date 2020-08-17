@@ -20,7 +20,7 @@ public class AdminService {
     private PasswordEncoder passwordEncoder;
 
     public boolean addUser(User user){
-        if(isExist(user)){
+        if(userIsExist(user)){
             return false;
         }
         user.setRoles(Collections.singleton(Role.USER));
@@ -41,7 +41,7 @@ public class AdminService {
         adminRepo.save(user);
     }
 
-    public boolean isExist(User user){
+    public boolean userIsExist(User user){
         User userFromDb = adminRepo.findByName(user.getUsername());
         return userFromDb != null;
     }

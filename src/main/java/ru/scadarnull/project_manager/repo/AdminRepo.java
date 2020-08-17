@@ -10,7 +10,5 @@ import java.util.List;
 public interface AdminRepo extends JpaRepository<User, Long> {
 
     List<User> findAll();
-
     User findByName(String name);
-
 }

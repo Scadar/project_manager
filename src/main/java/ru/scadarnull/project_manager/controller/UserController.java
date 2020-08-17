@@ -39,7 +39,7 @@ public class UserController {
 
     @PutMapping("/user/{id}")
     public User update(@PathVariable("id") User userFromDB, @RequestBody User user){
-        if(adminService.isExist(user)){
+        if(adminService.userIsExist(user)){
             throw new NotFoundException();
         }
         if(user.getName() != null){
