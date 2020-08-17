@@ -15,10 +15,15 @@ import java.util.List;
 
 @RestController
 public class UserController {
+
+    private final AdminService adminService;
+    private final PasswordEncoder passwordEncoder;
+
     @Autowired
-    private AdminService adminService;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    public UserController(AdminService adminService, PasswordEncoder passwordEncoder) {
+        this.adminService = adminService;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @GetMapping("/user")
     public List<User> list(){
