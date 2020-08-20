@@ -1,5 +1,6 @@
 package ru.scadarnull.project_manager.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -14,13 +15,18 @@ public class UserProject {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @NotNull
+    private Boolean isActive;
+
+    @Enumerated(EnumType.STRING)
+    @NotNull
+    private TeamRole teamRole;
+
     @ManyToOne
+    @JsonIgnoreProperties(value = "userProjects")
     private Project project;
 
     @ManyToOne
+    @JsonIgnoreProperties(value = "userProjects")
     private User user;
-    @NotNull
-    private Boolean isActive;
-    @NotNull
-    private String teamRole;
 }

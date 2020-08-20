@@ -7,7 +7,6 @@ import ru.scadarnull.project_manager.entity.User;
 import ru.scadarnull.project_manager.entity.UserTask;
 import ru.scadarnull.project_manager.repo.UserTaskRepo;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -24,10 +23,10 @@ public class UserTaskService {
         this.taskService = taskService;
     }
 
-    public UserTask add(Map<String, String> userTaskAsMap){
-        User user = adminService.findByName(userTaskAsMap.get("user"));
-        Task task = taskService.findByName(userTaskAsMap.get("task"));
-        Integer time = Integer.valueOf(userTaskAsMap.get("time"));
+    public UserTask add(Map<String, String> param){
+        User user = adminService.findByName(param.get("user"));
+        Task task = taskService.findByName(param.get("task"));
+        Integer time = Integer.valueOf(param.get("time"));
         UserTask userTask = new UserTask();
         userTask.setUser(user);
         userTask.setTask(task);

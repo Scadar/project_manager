@@ -41,6 +41,7 @@ public class User implements UserDetails {
     private List<UserTask> userTasks;
 
     @OneToMany(mappedBy = "user")
+    @JsonIgnoreProperties(value = "user")
     private List<UserProject> userProjects;
 
     public User (){}
