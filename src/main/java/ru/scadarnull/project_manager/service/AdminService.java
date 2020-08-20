@@ -23,7 +23,7 @@ public class AdminService {
         if(userIsExist(user)){
             return false;
         }
-        user.setRoles(Collections.singleton(Role.USER));
+        user.addRole(Role.USER);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         adminRepo.save(user);
         return true;

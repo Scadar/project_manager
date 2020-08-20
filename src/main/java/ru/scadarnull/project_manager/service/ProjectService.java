@@ -33,11 +33,20 @@ public class ProjectService {
         return projectFromDb != null;
     }
 
+    public boolean projectIsExist(String project){
+        Project projectFromDb = projectRepo.findByName(project);
+        return projectFromDb != null;
+    }
+
     public void updateProject(Project project) {
         projectRepo.save(project);
     }
 
     public void deleteProject(Project project) {
         projectRepo.delete(project);
+    }
+
+    public Project findByName(String project) {
+        return projectRepo.findByName(project);
     }
 }

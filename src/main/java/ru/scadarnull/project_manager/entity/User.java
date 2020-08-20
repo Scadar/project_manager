@@ -50,6 +50,9 @@ public class User implements UserDetails {
         this.post = post;
     }
 
+    public void addRole(Role role){
+        roles.add(role);
+    }
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return getRoles();

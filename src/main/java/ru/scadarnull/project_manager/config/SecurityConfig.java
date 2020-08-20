@@ -31,7 +31,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .httpBasic()
                 .and()
                     .authorizeRequests()
-                    .antMatchers("/login","/static/**").permitAll()
+                    .antMatchers("/login","/static/**", "/test").permitAll()
                     .antMatchers("/admin/**", "/user/**", "/project/**").hasRole("ADMIN")
                     .anyRequest().authenticated()
                 .and()

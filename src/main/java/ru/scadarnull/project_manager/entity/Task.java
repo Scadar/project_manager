@@ -1,9 +1,9 @@
 package ru.scadarnull.project_manager.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
 import javax.persistence.*;
-import javax.validation.constraints.Max;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
@@ -19,7 +19,6 @@ public class Task {
     @Size(min = 3, max = 30)
     private String name;
 
-    @Max(value = 200)
     private String description;
 
     private LocalDate actualEndTime;
@@ -29,6 +28,8 @@ public class Task {
     private State state;
 
     @ManyToOne
+    @JsonIgnoreProperties("tasks")
+    @JoinColumn(nullable = false)
     private Project project;
 
     @OneToMany(mappedBy = "task")
