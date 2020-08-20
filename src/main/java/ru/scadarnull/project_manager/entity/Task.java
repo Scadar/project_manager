@@ -33,5 +33,6 @@ public class Task {
     private Project project;
 
     @OneToMany(mappedBy = "task")
+    @JsonIgnoreProperties(value = "task")
     private List<UserTask> userTasks;
 }

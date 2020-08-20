@@ -45,4 +45,13 @@ public class AdminService {
         User userFromDb = adminRepo.findByName(user.getUsername());
         return userFromDb != null;
     }
+
+    public boolean userIsExist(String user){
+        User userFromDb = adminRepo.findByName(user);
+        return userFromDb != null;
+    }
+
+    public User findByName(String name){
+        return adminRepo.findByName(name);
+    }
 }

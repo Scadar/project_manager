@@ -1,5 +1,6 @@
 package ru.scadarnull.project_manager.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -15,11 +16,13 @@ public class UserTask {
     private Long id;
 
     @NotNull
-    private LocalDate time;
+    private Integer time;
 
     @ManyToOne
+    @JsonIgnoreProperties(value = "userTasks")
     private Task task;
 
     @ManyToOne
+    @JsonIgnoreProperties(value = "userTasks")
     private User user;
 }

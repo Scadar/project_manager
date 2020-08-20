@@ -43,4 +43,13 @@ public class TaskService {
     public void updateTask(Task task) {
         taskRepo.save(task);
     }
+
+    public Task findByName(String name) {
+        return taskRepo.findByName(name);
+    }
+
+    public boolean taskIsExist(String task) {
+        Task taskFromDb = taskRepo.findByName(task);
+        return taskFromDb != null;
+    }
 }
