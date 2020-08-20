@@ -2,6 +2,7 @@ package ru.scadarnull.project_manager.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import ru.scadarnull.project_manager.entity.TeamRole;
 import ru.scadarnull.project_manager.entity.UserProject;
 import ru.scadarnull.project_manager.entity.UserTask;
 import ru.scadarnull.project_manager.exceptions.NotFoundException;
@@ -46,5 +47,17 @@ public class UserProjectController {
         }
         UserProject userProject = userProjectService.add(param);
         return userProject;
+    }
+
+    @PutMapping("/user_project/{id}")
+    public UserProject update(@PathVariable("id") UserProject userProject,
+                           @RequestBody Map<String, String> param) {
+        userProjectService.updateParam(userProject, param);
+        return userProject;
+    }
+
+    @DeleteMapping("/user_project/{id}")
+    public void delete(@PathVariable("id") UserProject userProject){
+        userProjectService.delete(userProject);
     }
 }

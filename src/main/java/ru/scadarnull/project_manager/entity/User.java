@@ -1,6 +1,6 @@
 package ru.scadarnull.project_manager.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.*;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -8,6 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.HashSet;
@@ -16,7 +17,8 @@ import java.util.Set;
 
 @Entity
 @Data
-public class User implements UserDetails {
+@JsonIdentityInfo(generator= ObjectIdGenerators.IntSequenceGenerator.class, property="@userId")
+public class User implements UserDetails, Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -37,11 +39,9 @@ public class User implements UserDetails {
     private Set<Role> roles = new HashSet<>();
 
     @OneToMany(mappedBy = "user")
-    @JsonIgnoreProperties(value = "user")
     private List<UserTask> userTasks;
 
     @OneToMany(mappedBy = "user")
-    @JsonIgnoreProperties(value = "user")
     private List<UserProject> userProjects;
 
     public User (){}
@@ -56,6 +56,7 @@ public class User implements UserDetails {
     public void addRole(Role role){
         roles.add(role);
     }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return getRoles();

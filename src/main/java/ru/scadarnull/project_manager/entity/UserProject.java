@@ -1,6 +1,6 @@
 package ru.scadarnull.project_manager.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.*;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -9,6 +9,7 @@ import javax.validation.constraints.NotNull;
 @Entity
 @Data
 @Table(name = "USER_PROJECT")
+@JsonIdentityInfo(generator= ObjectIdGenerators.IntSequenceGenerator.class, property="@userProjectId")
 public class UserProject {
 
     @Id
@@ -23,10 +24,8 @@ public class UserProject {
     private TeamRole teamRole;
 
     @ManyToOne
-    @JsonIgnoreProperties(value = "userProjects")
     private Project project;
 
     @ManyToOne
-    @JsonIgnoreProperties(value = "userProjects")
     private User user;
 }

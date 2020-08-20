@@ -1,6 +1,6 @@
 package ru.scadarnull.project_manager.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.*;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -11,6 +11,7 @@ import java.util.List;
 
 @Entity
 @Data
+@JsonIdentityInfo(generator= ObjectIdGenerators.IntSequenceGenerator.class, property="@taskId")
 public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -28,11 +29,9 @@ public class Task {
     private State state;
 
     @ManyToOne
-    @JsonIgnoreProperties("tasks")
     @JoinColumn(nullable = false)
     private Project project;
 
     @OneToMany(mappedBy = "task")
-    @JsonIgnoreProperties(value = "task")
     private List<UserTask> userTasks;
 }

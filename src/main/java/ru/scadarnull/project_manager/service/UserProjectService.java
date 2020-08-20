@@ -39,4 +39,20 @@ public class UserProjectService {
         userProjectRepo.save(userProject);
         return userProject;
     }
+
+    public void delete(UserProject userProject) {
+        userProjectRepo.delete(userProject);
+    }
+
+    public void updateParam(UserProject userProject, Map<String, String> param) {
+        Boolean is_active = Boolean.valueOf(param.get("is_active"));
+        TeamRole teamRole = TeamRole.valueOf(param.get("role"));
+        if(is_active != null){
+            userProject.setIsActive(is_active);
+        }
+        if(teamRole != null){
+            userProject.setTeamRole(teamRole);
+        }
+        userProjectRepo.save(userProject);
+    }
 }
