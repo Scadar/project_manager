@@ -50,4 +50,69 @@ public class TeamLeadService {
         }
         throw new ForbiddenException("Либо тимлида нет в проекте, либо юзера, а мб и обоих");
     }
+
+    public Task addTask(User user, Task task, String projectName) {
+        Project project = projectRepo.findByName(projectName);
+        List<Project> userProjects = projectRepo.findProjectByUser(user);
+        if(userProjects.contains(project)){
+            for(UserProject up : userProjectRepo.findProjectByUser(user)){
+                if(up.getProject().equals(project)){
+                    if(up.getTeamRole().equals(TeamRole.TEAM_LEAD)){
+                        task.setProject(project);
+                        taskRepo.save(task);
+                        return task;
+                    }else{
+                        throw new ForbiddenException("Вы не тимлид");
+                    }
+                }
+            }
+        }
+        throw new ForbiddenException("Не ваш проект");
+    }
+
+    public Task updateTask(User user, Map<String, String> param) {
+        Task task = taskRepo.findByName(param.get("task"));
+        Project project = task.getProject();
+        List<Project> userProjects = projectRepo.findProjectByUser(user);
+        if(userProjects.contains(project)){
+            for(UserProject up : userProjectRepo.findProjectByUser(user)){
+                if(up.getProject().equals(project)){
+                    if(up.getTeamRole().equals(TeamRole.TEAM_LEAD)){
+                        if(param.get("state") != null){
+                            task.setState(State.valueOf(param.get("state")));
+                        }
+                        if(param.get("name") != null){
+                            task.setName(param.get("name"));
+                        }
+                        if(param.get("description") != null){
+                            task.setDescription(param.get("description"));
+                        }
+                        taskRepo.save(task);
+                        return task;
+                    }else{
+                        throw new ForbiddenException("Вы не тимлид");
+                    }
+                }
+            }
+        }
+        throw new ForbiddenException("Это не ваш проект");
+    }
+
+    public void deleteTask(User user, Map<String, String> param) {
+        Task task = taskRepo.findByName(param.get("task"));
+        Project project = task.getProject();
+        List<Project> userProjects = projectRepo.findProjectByUser(user);
+        if(userProjects.contains(project)){
+            for(UserProject up : userProjectRepo.findProjectByUser(user)){
+                if(up.getProject().equals(project)){
+                    if(up.getTeamRole().equals(TeamRole.TEAM_LEAD)){
+                        taskRepo.delete(task);
+                    }else{
+                        throw new ForbiddenException("Вы не тимлид");
+                    }
+                }
+            }
+        }
+        throw new ForbiddenException("Это не ваш проект");
+    }
 }
