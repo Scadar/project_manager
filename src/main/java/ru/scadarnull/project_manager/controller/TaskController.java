@@ -1,10 +1,12 @@
 package ru.scadarnull.project_manager.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.scadarnull.project_manager.entity.Project;
 import ru.scadarnull.project_manager.entity.Task;
+import ru.scadarnull.project_manager.entity.User;
 import ru.scadarnull.project_manager.exceptions.IsExistException;
 import ru.scadarnull.project_manager.exceptions.NotFoundException;
 import ru.scadarnull.project_manager.exceptions.NotValidException;
@@ -40,14 +42,14 @@ public class TaskController {
     }
 
     @PostMapping("/task")
-    public Task create(@RequestBody @Valid Task task, @RequestParam(required = true) String project, BindingResult bindingResult){
+    public Task create(@AuthenticationPrincipal User user, @RequestBody @Valid Task task, @RequestParam(required = true) String project, BindingResult bindingResult){
         if(bindingResult.hasErrors()){
             throw new NotValidException("Невалидные данные");
         }
         if(!projectService.projectIsExist(project)){
             throw new NotFoundException("Проект не найдена");
         }
-        if(!taskService.addTask(task, project)){
+        if(!taskService.addTask(task, project, user)){
             throw new IsExistException("Такой проект уже есть");
         }
         return task;
@@ -62,7 +64,7 @@ public class TaskController {
             throw new IsExistException("Такая задача уже есть");
         }
         if(project!=null && !projectService.projectIsExist(project)){
-            throw new NotFoundException("Проект не найдена");
+            throw new NotFoundException("Проект не найден");
         }else if(project != null){
            taskFromDB.setProject(projectService.findByName(project));
         }

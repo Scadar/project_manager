@@ -41,7 +41,7 @@ public class User implements UserDetails, Serializable {
     @OneToMany(mappedBy = "user")
     private List<UserTask> userTasks;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     private List<UserProject> userProjects;
 
     public User (){}
