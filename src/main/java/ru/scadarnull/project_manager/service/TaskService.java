@@ -1,7 +1,5 @@
 package ru.scadarnull.project_manager.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 import ru.scadarnull.project_manager.entity.*;
 import ru.scadarnull.project_manager.repo.ProjectRepo;
@@ -35,7 +33,7 @@ public class TaskService {
             if(!projectRepo.findProjectByUser(user).contains(projectFromDB)){
                 return false;
             }
-            List<UserProject> userProjects = userProjectRepo.findProjectByUser(user);
+            List<UserProject> userProjects = userProjectRepo.findUserProjectByUser(user);
             for(UserProject up : userProjects){
                 if(up.getProject().equals(projectFromDB)){
                     if(!up.getTeamRole().equals(TeamRole.TEAM_LEAD)){

@@ -42,7 +42,10 @@ public class TaskController {
     }
 
     @PostMapping("/task")
-    public Task create(@AuthenticationPrincipal User user, @RequestBody @Valid Task task, @RequestParam(required = true) String project, BindingResult bindingResult){
+    public Task create(@AuthenticationPrincipal User user,
+                       @RequestBody @Valid Task task,
+                       @RequestParam(required = true) String project,
+                       BindingResult bindingResult){
         if(bindingResult.hasErrors()){
             throw new NotValidException("Невалидные данные");
         }
@@ -65,7 +68,8 @@ public class TaskController {
         }
         if(project!=null && !projectService.projectIsExist(project)){
             throw new NotFoundException("Проект не найден");
-        }else if(project != null){
+        }
+        if(project != null){
            taskFromDB.setProject(projectService.findByName(project));
         }
         if(task.getName() != null){

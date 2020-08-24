@@ -11,14 +11,14 @@ import java.util.Map;
 @Service
 public class TeamLeadService {
 
-    private AdminRepo adminRepo;
+    private UserRepo userRepo;
     private TaskRepo taskRepo;
     private ProjectRepo projectRepo;
     private UserProjectRepo userProjectRepo;
     private UserTaskRepo userTaskRepo;
 
-    public TeamLeadService(AdminRepo adminRepo, TaskRepo taskRepo, ProjectRepo projectRepo, UserProjectRepo userProjectRepo, UserTaskRepo userTaskRepo) {
-        this.adminRepo = adminRepo;
+    public TeamLeadService(UserRepo userRepo, TaskRepo taskRepo, ProjectRepo projectRepo, UserProjectRepo userProjectRepo, UserTaskRepo userTaskRepo) {
+        this.userRepo = userRepo;
         this.taskRepo = taskRepo;
         this.projectRepo = projectRepo;
         this.userProjectRepo = userProjectRepo;
@@ -26,13 +26,13 @@ public class TeamLeadService {
     }
 
     public UserTask addRelationship(User teamLead, Map<String, String> param) {
-        User user = adminRepo.findByName(param.get("user"));
+        User user = userRepo.findByName(param.get("user"));
         Task task = taskRepo.findByName(param.get("task"));
         Project project = task.getProject();
         List<Project> teamLeadProjects = projectRepo.findProjectByUser(teamLead);
         List<Project> userProjects = projectRepo.findProjectByUser(user);
         if(teamLeadProjects.contains(project) && userProjects.contains(project)){
-            for(UserProject up : userProjectRepo.findProjectByUser(teamLead)){
+            for(UserProject up : userProjectRepo.findUserProjectByUser(teamLead)){
                 if(up.getProject().equals(project)){
                     if(up.getTeamRole().equals(TeamRole.TEAM_LEAD)){
                         UserTask userTask = new UserTask();
@@ -55,7 +55,7 @@ public class TeamLeadService {
         Project project = projectRepo.findByName(projectName);
         List<Project> userProjects = projectRepo.findProjectByUser(user);
         if(userProjects.contains(project)){
-            for(UserProject up : userProjectRepo.findProjectByUser(user)){
+            for(UserProject up : userProjectRepo.findUserProjectByUser(user)){
                 if(up.getProject().equals(project)){
                     if(up.getTeamRole().equals(TeamRole.TEAM_LEAD)){
                         task.setProject(project);
@@ -75,7 +75,7 @@ public class TeamLeadService {
         Project project = task.getProject();
         List<Project> userProjects = projectRepo.findProjectByUser(user);
         if(userProjects.contains(project)){
-            for(UserProject up : userProjectRepo.findProjectByUser(user)){
+            for(UserProject up : userProjectRepo.findUserProjectByUser(user)){
                 if(up.getProject().equals(project)){
                     if(up.getTeamRole().equals(TeamRole.TEAM_LEAD)){
                         if(param.get("state") != null){
@@ -103,7 +103,7 @@ public class TeamLeadService {
         Project project = task.getProject();
         List<Project> userProjects = projectRepo.findProjectByUser(user);
         if(userProjects.contains(project)){
-            for(UserProject up : userProjectRepo.findProjectByUser(user)){
+            for(UserProject up : userProjectRepo.findUserProjectByUser(user)){
                 if(up.getProject().equals(project)){
                     if(up.getTeamRole().equals(TeamRole.TEAM_LEAD)){
                         taskRepo.delete(task);

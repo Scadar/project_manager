@@ -8,7 +8,7 @@ import ru.scadarnull.project_manager.entity.User;
 import ru.scadarnull.project_manager.exceptions.IsExistException;
 import ru.scadarnull.project_manager.exceptions.NotFoundException;
 import ru.scadarnull.project_manager.exceptions.NotValidException;
-import ru.scadarnull.project_manager.service.AdminService;
+import ru.scadarnull.project_manager.service.UserService;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -16,18 +16,18 @@ import java.util.List;
 @RestController
 public class UserController {
 
-    private final AdminService adminService;
+    private final UserService userService;
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserController(AdminService adminService, PasswordEncoder passwordEncoder) {
-        this.adminService = adminService;
+    public UserController(UserService userService, PasswordEncoder passwordEncoder) {
+        this.userService = userService;
         this.passwordEncoder = passwordEncoder;
     }
 
     @GetMapping("/user")
     public List<User> list(){
-        return adminService.findAllUsers();
+        return userService.findAllUsers();
     }
 
     @GetMapping("/user/{id}")
@@ -43,7 +43,7 @@ public class UserController {
         if(bindingResult.hasErrors()){
             throw new NotValidException("Невалидные данные");
         }
-        if(!adminService.addUser(user)){
+        if(!userService.addUser(user)){
             throw new IsExistException("Такой пользователь уже есть");
         }
         return user;
@@ -52,7 +52,7 @@ public class UserController {
     @PutMapping("/user/{id}")
     public User update(@PathVariable("id") User userFromDB, @RequestBody User user){
 
-        if(adminService.userIsExist(user) && !userFromDB.getName().equals(user.getName())){
+        if(userService.userIsExist(user) && !userFromDB.getName().equals(user.getName())){
             throw new IsExistException("Такой пользователь уже есть");
         }
         if(user.getName() != null){
@@ -70,12 +70,12 @@ public class UserController {
         if(user.getSalary() != null){
             userFromDB.setSalary(user.getSalary());
         }
-        adminService.updateUser(userFromDB);
+        userService.updateUser(userFromDB);
         return userFromDB;
     }
 
     @DeleteMapping("/user/{id}")
     public void delete(@PathVariable("id") User user){
-         adminService.deleteUser(user);
+        userService.deleteUser(user);
     }
 }

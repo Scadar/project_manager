@@ -22,13 +22,11 @@ import java.util.Map;
 @RestController
 public class MyProjectController {
     private MyProjectService myProjectService;
-    private ProjectService projectService;
     private TaskService taskService;
     private DBUtils dbUtils;
 
-    public MyProjectController(MyProjectService myProjectService, ProjectService projectService, TaskService taskService, DBUtils dbUtils) {
+    public MyProjectController(MyProjectService myProjectService, TaskService taskService, DBUtils dbUtils) {
         this.myProjectService = myProjectService;
-        this.projectService = projectService;
         this.taskService = taskService;
         this.dbUtils = dbUtils;
     }
@@ -55,7 +53,7 @@ public class MyProjectController {
         if(bindingResult.hasErrors()){
             throw new NotValidException("Невалидные данные");
         }
-        if(!projectService.projectIsExist(project)){
+        if(!dbUtils.projectIsExist(project)){
             throw new NotFoundException("Проект не найдена");
         }
         if(!taskService.addTask(task, project, user)){

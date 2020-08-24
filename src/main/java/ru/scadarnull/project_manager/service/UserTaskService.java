@@ -13,18 +13,18 @@ import java.util.Map;
 @Service
 public class UserTaskService {
     private UserTaskRepo userTaskRepo;
-    private AdminService adminService;
+    private UserService userService;
     private TaskService taskService;
 
     @Autowired
-    public UserTaskService(UserTaskRepo userTaskRepo, AdminService adminService, TaskService taskService) {
+    public UserTaskService(UserTaskRepo userTaskRepo, UserService userService, TaskService taskService) {
         this.userTaskRepo = userTaskRepo;
-        this.adminService = adminService;
+        this.userService = userService;
         this.taskService = taskService;
     }
 
     public UserTask add(Map<String, String> param){
-        User user = adminService.findByName(param.get("user"));
+        User user = userService.findByName(param.get("user"));
         Task task = taskService.findByName(param.get("task"));
         Integer time = Integer.valueOf(param.get("time"));
         UserTask userTask = new UserTask();
@@ -40,7 +40,7 @@ public class UserTaskService {
     }
 
     public boolean userIsExist(String name) {
-        return adminService.userIsExist(name);
+        return userService.userIsExist(name);
     }
 
     public boolean taskIsExist(String task) {

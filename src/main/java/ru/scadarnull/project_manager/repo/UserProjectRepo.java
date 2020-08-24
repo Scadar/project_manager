@@ -14,6 +14,6 @@ import java.util.List;
 public interface UserProjectRepo extends JpaRepository<UserProject, Long> {
 
     @Query("SELECT up FROM UserProject up WHERE up.user = :user")
-    List<UserProject> findProjectByUser(@Param("user") User user);
+    List<UserProject> findUserProjectByUser(@Param("user") User user);
 
 }

@@ -5,25 +5,25 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.scadarnull.project_manager.entity.Role;
 import ru.scadarnull.project_manager.entity.User;
-import ru.scadarnull.project_manager.service.AdminService;
+import ru.scadarnull.project_manager.service.UserService;
 
 import java.math.BigDecimal;
 
 @RestController
 public class AdminController {
 
-    private AdminService adminService;
+    private UserService userService;
 
     @Autowired
-    public AdminController(AdminService adminService) {
-        this.adminService = adminService;
+    public AdminController(UserService userService) {
+        this.userService = userService;
     }
 
     @GetMapping("/test")
     public User addAdmin(){
         User admin = new User("admin", "admin", new BigDecimal(0), "admin");
         admin.addRole(Role.ADMIN);
-        adminService.addUser(admin);
+        userService.addUser(admin);
         return admin;
     }
 }

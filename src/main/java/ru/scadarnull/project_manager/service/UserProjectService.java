@@ -12,13 +12,13 @@ import java.util.Map;
 public class UserProjectService {
 
     private UserProjectRepo userProjectRepo;
-    private AdminService adminService;
+    private UserService userService;
     private ProjectService projectService;
 
     @Autowired
-    public UserProjectService(UserProjectRepo userProjectRepo, AdminService adminService, ProjectService projectService) {
+    public UserProjectService(UserProjectRepo userProjectRepo, UserService userService, ProjectService projectService) {
         this.userProjectRepo = userProjectRepo;
-        this.adminService = adminService;
+        this.userService = userService;
         this.projectService = projectService;
     }
 
@@ -27,7 +27,7 @@ public class UserProjectService {
     }
 
     public UserProject add(Map<String, String> param) {
-        User user = adminService.findByName(param.get("user"));
+        User user = userService.findByName(param.get("user"));
         Project project = projectService.findByName(param.get("project"));
         Boolean is_active = Boolean.valueOf(param.get("is_active"));
         TeamRole teamRole = TeamRole.valueOf(param.get("role"));
