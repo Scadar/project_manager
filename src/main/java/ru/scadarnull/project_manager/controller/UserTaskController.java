@@ -1,14 +1,9 @@
 package ru.scadarnull.project_manager.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import ru.scadarnull.project_manager.entity.Task;
-import ru.scadarnull.project_manager.entity.User;
 import ru.scadarnull.project_manager.entity.UserTask;
-import ru.scadarnull.project_manager.exceptions.IsExistException;
 import ru.scadarnull.project_manager.exceptions.NotFoundException;
-import ru.scadarnull.project_manager.exceptions.NotValidException;
 import ru.scadarnull.project_manager.service.UserTaskService;
 
 import javax.validation.Valid;

@@ -3,18 +3,18 @@ package ru.scadarnull.project_manager.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.scadarnull.project_manager.entity.Project;
-import ru.scadarnull.project_manager.entity.Role;
-import ru.scadarnull.project_manager.entity.User;
 import ru.scadarnull.project_manager.repo.ProjectRepo;
 
-import java.util.Collections;
 import java.util.List;
 
 @Service
 public class ProjectService {
 
-    @Autowired
     private ProjectRepo projectRepo;
+
+    public ProjectService(ProjectRepo projectRepo) {
+        this.projectRepo = projectRepo;
+    }
 
     public List<Project> findAllProjects() {
         return projectRepo.findAll();
@@ -29,12 +29,11 @@ public class ProjectService {
     }
 
     public boolean projectIsExist(Project project){
-        Project projectFromDb = projectRepo.findByName(project.getName());
-        return projectFromDb != null;
+        return projectIsExist(project.getName());
     }
 
     public boolean projectIsExist(String project){
-        Project projectFromDb = projectRepo.findByName(project);
+        Project projectFromDb = findByName(project);
         return projectFromDb != null;
     }
 

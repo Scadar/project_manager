@@ -17,7 +17,12 @@ public class TeamLeadService {
     private UserProjectRepo userProjectRepo;
     private UserTaskRepo userTaskRepo;
 
-    public TeamLeadService(UserRepo userRepo, TaskRepo taskRepo, ProjectRepo projectRepo, UserProjectRepo userProjectRepo, UserTaskRepo userTaskRepo) {
+    public TeamLeadService(UserRepo userRepo,
+                           TaskRepo taskRepo,
+                           ProjectRepo projectRepo,
+                           UserProjectRepo userProjectRepo,
+                           UserTaskRepo userTaskRepo)
+    {
         this.userRepo = userRepo;
         this.taskRepo = taskRepo;
         this.projectRepo = projectRepo;

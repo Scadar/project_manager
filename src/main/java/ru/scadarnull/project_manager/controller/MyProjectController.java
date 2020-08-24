@@ -11,7 +11,6 @@ import ru.scadarnull.project_manager.exceptions.IsExistException;
 import ru.scadarnull.project_manager.exceptions.NotFoundException;
 import ru.scadarnull.project_manager.exceptions.NotValidException;
 import ru.scadarnull.project_manager.service.MyProjectService;
-import ru.scadarnull.project_manager.service.ProjectService;
 import ru.scadarnull.project_manager.service.TaskService;
 import ru.scadarnull.project_manager.utils.DBUtils;
 

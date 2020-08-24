@@ -1,6 +1,5 @@
 package ru.scadarnull.project_manager.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -56,12 +55,11 @@ public class UserService implements UserDetailsService {
     }
 
     public boolean userIsExist(User user){
-        User userFromDb = userRepo.findByName(user.getUsername());
-        return userFromDb != null;
+        return userIsExist(user.getName());
     }
 
     public boolean userIsExist(String user){
-        User userFromDb = userRepo.findByName(user);
+        User userFromDb = findByName(user);
         return userFromDb != null;
     }
 

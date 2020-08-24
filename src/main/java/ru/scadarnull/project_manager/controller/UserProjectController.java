@@ -2,9 +2,7 @@ package ru.scadarnull.project_manager.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import ru.scadarnull.project_manager.entity.TeamRole;
 import ru.scadarnull.project_manager.entity.UserProject;
-import ru.scadarnull.project_manager.entity.UserTask;
 import ru.scadarnull.project_manager.exceptions.NotFoundException;
 import ru.scadarnull.project_manager.service.UserProjectService;
 import ru.scadarnull.project_manager.utils.DBUtils;

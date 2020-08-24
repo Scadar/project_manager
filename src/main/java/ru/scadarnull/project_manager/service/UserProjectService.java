@@ -3,6 +3,7 @@ package ru.scadarnull.project_manager.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.scadarnull.project_manager.entity.*;
+import ru.scadarnull.project_manager.exceptions.NotValidException;
 import ru.scadarnull.project_manager.repo.UserProjectRepo;
 
 import java.util.List;
@@ -16,7 +17,10 @@ public class UserProjectService {
     private ProjectService projectService;
 
     @Autowired
-    public UserProjectService(UserProjectRepo userProjectRepo, UserService userService, ProjectService projectService) {
+    public UserProjectService(UserProjectRepo userProjectRepo,
+                              UserService userService,
+                              ProjectService projectService)
+    {
         this.userProjectRepo = userProjectRepo;
         this.userService = userService;
         this.projectService = projectService;
@@ -27,15 +31,23 @@ public class UserProjectService {
     }
 
     public UserProject add(Map<String, String> param) {
-        User user = userService.findByName(param.get("user"));
-        Project project = projectService.findByName(param.get("project"));
-        Boolean is_active = Boolean.valueOf(param.get("is_active"));
-        TeamRole teamRole = TeamRole.valueOf(param.get("role"));
+        if(param.get("user") == null){
+            throw new NotValidException("Нет поля user");
+        }
+        if(param.get("project") == null){
+            throw new NotValidException("Нет поля project");
+        }
+        if(param.get("is_active") == null){
+            throw new NotValidException("Нет поля is_active");
+        }
+        if(param.get("role") == null){
+            throw new NotValidException("Нет поля role");
+        }
         UserProject userProject = new UserProject();
-        userProject.setUser(user);
-        userProject.setProject(project);
-        userProject.setIsActive(is_active);
-        userProject.setTeamRole(teamRole);
+        userProject.setUser(userService.findByName(param.get("user")));
+        userProject.setProject(projectService.findByName(param.get("project")));
+        userProject.setIsActive(Boolean.valueOf(param.get("is_active")));
+        userProject.setTeamRole(TeamRole.valueOf(param.get("role")));
         userProjectRepo.save(userProject);
         return userProject;
     }
@@ -45,14 +57,14 @@ public class UserProjectService {
     }
 
     public void updateParam(UserProject userProject, Map<String, String> param) {
-        Boolean is_active = Boolean.valueOf(param.get("is_active"));
-        TeamRole teamRole = TeamRole.valueOf(param.get("role"));
-        if(is_active != null){
-            userProject.setIsActive(is_active);
+        if(param.get("is_active") == null){
+            throw new NotValidException("Нет поля is_active");
         }
-        if(teamRole != null){
-            userProject.setTeamRole(teamRole);
+        if(param.get("role") == null){
+            throw new NotValidException("Нет поля role");
         }
+        userProject.setIsActive(Boolean.valueOf(param.get("is_active")));
+        userProject.setTeamRole(TeamRole.valueOf(param.get("role")));
         userProjectRepo.save(userProject);
     }
 }

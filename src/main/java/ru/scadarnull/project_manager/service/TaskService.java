@@ -48,11 +48,6 @@ public class TaskService {
         return true;
     }
 
-    public boolean taskIsExist(Task task) {
-        Task taskFromDb = taskRepo.findByName(task.getName());
-        return taskFromDb != null;
-    }
-
     public void deleteTask(Task task) {
         taskRepo.delete(task);
     }
@@ -65,8 +60,12 @@ public class TaskService {
         return taskRepo.findByName(name);
     }
 
+    public boolean taskIsExist(Task task) {
+        return taskIsExist(task.getName());
+    }
+
     public boolean taskIsExist(String task) {
-        Task taskFromDb = taskRepo.findByName(task);
+        Task taskFromDb = findByName(task);
         return taskFromDb != null;
     }
 }
