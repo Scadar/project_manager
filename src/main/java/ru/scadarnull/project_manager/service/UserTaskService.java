@@ -12,9 +12,9 @@ import java.util.Map;
 
 @Service
 public class UserTaskService {
-    private UserTaskRepo userTaskRepo;
-    private UserService userService;
-    private TaskService taskService;
+    private final UserTaskRepo userTaskRepo;
+    private final UserService userService;
+    private final TaskService taskService;
 
     @Autowired
     public UserTaskService(UserTaskRepo userTaskRepo, UserService userService, TaskService taskService) {

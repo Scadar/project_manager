@@ -4,5 +4,5 @@ public enum  State {
     UNDER_CONSIDERATION,
     CONFIRMED,
     IN_WORK,
-    COMPLETED;
+    COMPLETED
 }

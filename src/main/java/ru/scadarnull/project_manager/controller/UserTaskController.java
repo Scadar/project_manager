@@ -6,13 +6,12 @@ import ru.scadarnull.project_manager.entity.UserTask;
 import ru.scadarnull.project_manager.exceptions.NotFoundException;
 import ru.scadarnull.project_manager.service.UserTaskService;
 
-import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
 
 @RestController
 public class UserTaskController {
-    private UserTaskService userTaskService;
+    private final UserTaskService userTaskService;
 
     @Autowired
     public UserTaskController(UserTaskService userTaskService) {
@@ -40,8 +39,7 @@ public class UserTaskController {
         if(!userTaskService.taskIsExist(param.get("task"))){
             throw new NotFoundException("Task не найден");
         }
-        UserTask userTask = userTaskService.add(param);
-        return userTask;
+        return userTaskService.add(param);
     }
 
     @PutMapping("/user_task/{id}")

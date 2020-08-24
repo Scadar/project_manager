@@ -15,9 +15,9 @@ import java.util.stream.Collectors;
 @Service
 public class MyProjectService {
 
-    private ProjectRepo projectRepo;
-    private TaskRepo taskRepo;
-    private UserTaskRepo userTaskRepo;
+    private final ProjectRepo projectRepo;
+    private final TaskRepo taskRepo;
+    private final UserTaskRepo userTaskRepo;
 
     public MyProjectService(ProjectRepo projectRepo, TaskRepo taskRepo, UserTaskRepo userTaskRepo) {
         this.projectRepo = projectRepo;

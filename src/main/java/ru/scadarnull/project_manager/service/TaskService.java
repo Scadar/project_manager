@@ -10,9 +10,9 @@ import java.util.List;
 
 @Service
 public class TaskService {
-    private TaskRepo taskRepo;
-    private ProjectRepo projectRepo;
-    private UserProjectRepo userProjectRepo;
+    private final TaskRepo taskRepo;
+    private final ProjectRepo projectRepo;
+    private final UserProjectRepo userProjectRepo;
 
     public TaskService(TaskRepo taskRepo, ProjectRepo projectRepo, UserProjectRepo userProjectRepo) {
         this.taskRepo = taskRepo;

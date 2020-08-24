@@ -20,9 +20,9 @@ import java.util.Map;
 
 @RestController
 public class MyProjectController {
-    private MyProjectService myProjectService;
-    private TaskService taskService;
-    private DBUtils dbUtils;
+    private final MyProjectService myProjectService;
+    private final TaskService taskService;
+    private final DBUtils dbUtils;
 
     public MyProjectController(MyProjectService myProjectService, TaskService taskService, DBUtils dbUtils) {
         this.myProjectService = myProjectService;
@@ -46,7 +46,7 @@ public class MyProjectController {
     @PostMapping("/my_project/task")
     public Task addTask(@AuthenticationPrincipal User user,
                         @RequestBody @Valid Task task,
-                        @RequestParam(required = true) String project,
+                        @RequestParam String project,
                         BindingResult bindingResult)
     {
         if(bindingResult.hasErrors()){

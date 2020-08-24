@@ -12,9 +12,9 @@ import java.util.Map;
 @Service
 public class UserProjectService {
 
-    private UserProjectRepo userProjectRepo;
-    private UserService userService;
-    private ProjectService projectService;
+    private final UserProjectRepo userProjectRepo;
+    private final UserService userService;
+    private final ProjectService projectService;
 
     @Autowired
     public UserProjectService(UserProjectRepo userProjectRepo,

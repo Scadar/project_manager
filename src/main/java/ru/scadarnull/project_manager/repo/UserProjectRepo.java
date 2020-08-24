@@ -4,7 +4,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-import ru.scadarnull.project_manager.entity.Task;
 import ru.scadarnull.project_manager.entity.User;
 import ru.scadarnull.project_manager.entity.UserProject;
 

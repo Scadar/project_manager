@@ -16,8 +16,8 @@ import java.util.Map;
 
 @RestController
 public class TeamLeadController {
-    private TeamLeadService teamLeadService;
-    private DBUtils dbUtils;
+    private final TeamLeadService teamLeadService;
+    private final DBUtils dbUtils;
 
 
     public TeamLeadController(TeamLeadService teamLeadService, DBUtils dbUtils) {

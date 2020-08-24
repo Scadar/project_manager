@@ -18,8 +18,8 @@ import java.util.List;
 @RestController
 public class TaskController {
 
-    private TaskService taskService;
-    private ProjectService projectService;
+    private final TaskService taskService;
+    private final ProjectService projectService;
 
     @Autowired
     public TaskController(TaskService taskService, ProjectService projectService) {
@@ -43,7 +43,7 @@ public class TaskController {
     @PostMapping("/task")
     public Task create(@AuthenticationPrincipal User user,
                        @RequestBody @Valid Task task,
-                       @RequestParam(required = true) String project,
+                       @RequestParam String project,
                        BindingResult bindingResult){
         if(bindingResult.hasErrors()){
             throw new NotValidException("Невалидные данные");

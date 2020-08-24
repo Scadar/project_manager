@@ -13,8 +13,8 @@ import java.util.Map;
 @RestController
 public class UserProjectController {
 
-    private UserProjectService userProjectService;
-    private DBUtils dbUtils;
+    private final UserProjectService userProjectService;
+    private final DBUtils dbUtils;
 
     @Autowired
     public UserProjectController(UserProjectService userProjectService, DBUtils dbUtils) {
@@ -43,8 +43,7 @@ public class UserProjectController {
         if(!dbUtils.projectIsExist(param.get("project"))){
             throw new NotFoundException("Project не найден");
         }
-        UserProject userProject = userProjectService.add(param);
-        return userProject;
+        return userProjectService.add(param);
     }
 
     @PutMapping("/user_project/{id}")

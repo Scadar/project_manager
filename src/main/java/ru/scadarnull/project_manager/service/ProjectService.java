@@ -1,6 +1,5 @@
 package ru.scadarnull.project_manager.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.scadarnull.project_manager.entity.Project;
 import ru.scadarnull.project_manager.repo.ProjectRepo;
@@ -10,7 +9,7 @@ import java.util.List;
 @Service
 public class ProjectService {
 
-    private ProjectRepo projectRepo;
+    private final ProjectRepo projectRepo;
 
     public ProjectService(ProjectRepo projectRepo) {
         this.projectRepo = projectRepo;
