@@ -1,9 +1,12 @@
-package ru.scadarnull.project_manager.controller;
+package ru.scadarnull.project_manager.controller.admin;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.scadarnull.project_manager.entity.Project;
+import ru.scadarnull.project_manager.entity.Task;
+import ru.scadarnull.project_manager.entity.User;
+import ru.scadarnull.project_manager.entity.UserProject;
 import ru.scadarnull.project_manager.exceptions.IsExistException;
 import ru.scadarnull.project_manager.exceptions.NotFoundException;
 import ru.scadarnull.project_manager.exceptions.NotValidException;
@@ -11,6 +14,7 @@ import ru.scadarnull.project_manager.service.ProjectService;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class ProjectController {
@@ -59,6 +63,46 @@ public class ProjectController {
         }
         projectService.updateProject(projectFromDB);
         return projectFromDB;
+    }
+
+    @GetMapping("/project/{id}/users")
+    public List<User> getUsersByProject(@PathVariable("id") Project project){
+        if(project == null){
+            throw new NotFoundException("Проект не найден");
+        }
+        return projectService.getUsersByProject(project);
+    }
+
+    @PostMapping("/project/{projectId}/user/{userId}")
+    public UserProject getUserInProject(@PathVariable("projectId") Project project,
+                                         @PathVariable("userId") User user,
+                                         @RequestBody Map<String, String> params){
+        if(project == null){
+            throw new NotFoundException("Проект не найден");
+        }
+        if(user == null){
+            throw new NotFoundException("Пользователь не найден");
+        }
+        if(params.get("teamRole") == null){
+            throw new NotValidException("Надо добавить teamRole");
+        }
+        if(params.get("isActive") == null){
+            throw new NotValidException("Надо добавить isActive");
+        }
+        return projectService.addUserInProject(user, project, params);
+    }
+
+    @PutMapping("/project/{projectId}/user/{userId}")
+    public UserProject updateUserInProject(@PathVariable("projectId") Project project,
+                                         @PathVariable("userId") User user,
+                                         @RequestBody Map<String, String> params){
+        if(project == null){
+            throw new NotFoundException("Проект не найден");
+        }
+        if(user == null){
+            throw new NotFoundException("Пользователь не найден");
+        }
+        return projectService.updateUserInProject(user, project, params);
     }
 
     @DeleteMapping("/project/{id}")

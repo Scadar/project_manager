@@ -1,12 +1,10 @@
-package ru.scadarnull.project_manager.controller;
+package ru.scadarnull.project_manager.controller.admin;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import ru.scadarnull.project_manager.entity.Task;
-import ru.scadarnull.project_manager.entity.User;
-import ru.scadarnull.project_manager.exceptions.IsExistException;
+import ru.scadarnull.project_manager.entity.*;
 import ru.scadarnull.project_manager.exceptions.NotFoundException;
 import ru.scadarnull.project_manager.exceptions.NotValidException;
 import ru.scadarnull.project_manager.service.ProjectService;
@@ -14,6 +12,7 @@ import ru.scadarnull.project_manager.service.TaskService;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class TaskController {
@@ -40,37 +39,24 @@ public class TaskController {
         return task;
     }
 
-    @PostMapping("/task")
+    @PostMapping("/task/project/{projectId}")
     public Task create(@AuthenticationPrincipal User user,
                        @RequestBody @Valid Task task,
-                       @RequestParam String project,
+                       @PathVariable("projectId") Project project,
                        BindingResult bindingResult){
         if(bindingResult.hasErrors()){
             throw new NotValidException("Невалидные данные");
         }
-        if(!projectService.projectIsExist(project)){
-            throw new NotFoundException("Проект не найдена");
+        if(project == null){
+            throw new NotFoundException("Проект не найден");
         }
-        if(!taskService.addTask(task, project, user)){
-            throw new IsExistException("Такой проект уже есть");
-        }
-        return task;
+        return taskService.addTask(task, project, user);
     }
 
     @PutMapping("/task/{id}")
     public Task update(@PathVariable("id") Task taskFromDB,
-                       @RequestBody Task task,
-                       @RequestParam(required = false) String project
+                       @RequestBody Task task
     ){
-        if(taskService.taskIsExist(task) && !taskFromDB.getName().equals(task.getName())){
-            throw new IsExistException("Такая задача уже есть");
-        }
-        if(project!=null && !projectService.projectIsExist(project)){
-            throw new NotFoundException("Проект не найден");
-        }
-        if(project != null){
-           taskFromDB.setProject(projectService.findByName(project));
-        }
         if(task.getName() != null){
             taskFromDB.setName(task.getName());
         }
@@ -85,6 +71,42 @@ public class TaskController {
         }
         taskService.updateTask(taskFromDB);
         return taskFromDB;
+    }
+
+    @GetMapping("/task/{id}/users")
+    public List<User> getUsersByTask(@PathVariable("id") Task task){
+        if(task == null){
+            throw new NotFoundException("Task не найден");
+        }
+        return taskService.getUsersByTask(task);
+    }
+
+    @PostMapping("/task/{taskId}/user/{userId}")
+    public UserTask addUserInTask(   @PathVariable("taskId") Task task,
+                                     @PathVariable("userId") User user){
+        if(task == null){
+            throw new NotFoundException("Task не найден");
+        }
+        if(user == null){
+            throw new NotFoundException("Пользователь не найден");
+        }
+        return taskService.addUserInTask(user, task);
+    }
+
+    @PutMapping("/task/{taskId}/user/{userId}")
+    public UserTask updateUserInProject(@PathVariable("taskId") Task task,
+                                           @PathVariable("userId") User user,
+                                           @RequestBody Map<String, String> params){
+        if(task == null){
+            throw new NotFoundException("Проект не найден");
+        }
+        if(user == null){
+            throw new NotFoundException("Пользователь не найден");
+        }
+        if(params.get("time") == null){
+            throw new NotValidException("Нет поля time");
+        }
+        return taskService.updateUserInTask(user, task, params);
     }
 
     @DeleteMapping("/task/{id}")

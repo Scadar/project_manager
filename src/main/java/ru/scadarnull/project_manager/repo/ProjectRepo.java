@@ -14,5 +14,5 @@ public interface ProjectRepo extends JpaRepository<Project, Long> {
     Project findByName(String name);
 
     @Query("SELECT up.project FROM UserProject up WHERE up.user = :user")
-    List<Project> findProjectByUser(@Param("user") User user);
+    List<Project> findProjectsByUser(@Param("user") User user);
 }

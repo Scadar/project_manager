@@ -1,4 +1,4 @@
-package ru.scadarnull.project_manager.controller;
+package ru.scadarnull.project_manager.controller.user;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
@@ -43,22 +43,19 @@ public class MyProjectController {
         return myProjectService.getMyTasks(user);
     }
 
-    @PostMapping("/my_project/task")
+    @PostMapping("/my_project/task/project/{projectId}")
     public Task addTask(@AuthenticationPrincipal User user,
                         @RequestBody @Valid Task task,
-                        @RequestParam String project,
+                        @PathVariable Project project,
                         BindingResult bindingResult)
     {
         if(bindingResult.hasErrors()){
             throw new NotValidException("Невалидные данные");
         }
-        if(!dbUtils.projectIsExist(project)){
+        if(project == null){
             throw new NotFoundException("Проект не найдена");
         }
-        if(!taskService.addTask(task, project, user)){
-            throw new IsExistException("Такой проект уже есть / Нет доступа");
-        }
-        return task;
+        return taskService.addTask(task, project, user);
     }
 
     @PutMapping("/my_project/task")

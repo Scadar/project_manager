@@ -1,9 +1,11 @@
-package ru.scadarnull.project_manager.controller;
+package ru.scadarnull.project_manager.controller.admin;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import ru.scadarnull.project_manager.entity.Project;
+import ru.scadarnull.project_manager.entity.Task;
 import ru.scadarnull.project_manager.entity.User;
 import ru.scadarnull.project_manager.exceptions.IsExistException;
 import ru.scadarnull.project_manager.exceptions.NotFoundException;
@@ -56,9 +58,6 @@ public class UserController {
             throw new IsExistException("Такой пользователь уже есть");
         }
         if(user.getName() != null){
-            if(user.getName().length() < 3 || user.getName().length() > 30){
-                throw new NotValidException("Невалидные данные");
-            }
             userFromDB.setName(user.getName());
         }
         if(user.getPassword() != null){
@@ -72,6 +71,33 @@ public class UserController {
         }
         userService.updateUser(userFromDB);
         return userFromDB;
+    }
+
+    @GetMapping("/user/{userId}/tasks")
+    public List<Task> getTasksByUser(@PathVariable("userId") User user){
+        if(user == null){
+            throw new NotFoundException("Пользователь не найден");
+        }
+        return userService.getTasksByUser(user);
+    }
+
+    @GetMapping("/user/{userId}/projects")
+    public List<Project> getProjectsByUser(@PathVariable("userId") User user){
+        if(user == null){
+            throw new NotFoundException("Пользователь не найден");
+        }
+        return userService.getProjectsByUser(user);
+    }
+
+    @GetMapping("/user/{userId}/projects/{projectId}/tasks")
+    public List<Task> getTaskByUserAndProject(@PathVariable("userId") User user, @PathVariable("projectId") Project project){
+        if(user == null){
+            throw new NotFoundException("Пользователь не найден");
+        }
+        if(project == null){
+            throw new NotFoundException("Проект не найден");
+        }
+        return userService.getTaskByUserAndProject(user, project);
     }
 
     @DeleteMapping("/user/{id}")

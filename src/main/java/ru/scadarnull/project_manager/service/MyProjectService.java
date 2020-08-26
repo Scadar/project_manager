@@ -26,7 +26,7 @@ public class MyProjectService {
     }
 
     public List<Project> getMyProjects(User user){
-        return projectRepo.findProjectByUser(user);
+        return projectRepo.findProjectsByUser(user);
     }
 
     public List<Task> getMyTasks(User user) {

@@ -41,8 +41,8 @@ public class TeamLeadService {
         User userFromParameter = userRepo.findByName(param.get("user"));
         Task task = taskRepo.findByName(param.get("task"));
         Project project = task.getProject();
-        List<Project> teamLeadProjects = projectRepo.findProjectByUser(authUser);
-        List<Project> userProjects = projectRepo.findProjectByUser(userFromParameter);
+        List<Project> teamLeadProjects = projectRepo.findProjectsByUser(authUser);
+        List<Project> userProjects = projectRepo.findProjectsByUser(userFromParameter);
 
         if(teamLeadProjects.contains(project) && userProjects.contains(project)){
             UserProject up = getUserProjectByUserAndProject(authUser, project);
@@ -73,7 +73,7 @@ public class TeamLeadService {
 
     public Task addTask(User user, Task task, String projectName) {
         Project project = projectRepo.findByName(projectName);
-        List<Project> userProjects = projectRepo.findProjectByUser(user);
+        List<Project> userProjects = projectRepo.findProjectsByUser(user);
         if(userProjects.contains(project)){
             UserProject up = getUserProjectByUserAndProject(user, project);
             if(up != null){
@@ -94,7 +94,7 @@ public class TeamLeadService {
         }
         Task task = taskRepo.findByName(param.get("task"));
         Project project = task.getProject();
-        List<Project> userProjects = projectRepo.findProjectByUser(user);
+        List<Project> userProjects = projectRepo.findProjectsByUser(user);
         if(userProjects.contains(project)){
             UserProject up = getUserProjectByUserAndProject(user, project);
             if(up != null){
@@ -123,7 +123,7 @@ public class TeamLeadService {
         }
         Task task = taskRepo.findByName(param.get("task"));
         Project project = task.getProject();
-        List<Project> userProjects = projectRepo.findProjectByUser(user);
+        List<Project> userProjects = projectRepo.findProjectsByUser(user);
         if(userProjects.contains(project)){
             UserProject up = getUserProjectByUserAndProject(user, project);
             if(up != null){

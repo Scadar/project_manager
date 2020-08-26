@@ -1,4 +1,4 @@
-package ru.scadarnull.project_manager.controller;
+package ru.scadarnull.project_manager.controller.user;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;

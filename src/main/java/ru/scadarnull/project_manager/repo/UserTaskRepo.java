@@ -4,8 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-import ru.scadarnull.project_manager.entity.User;
-import ru.scadarnull.project_manager.entity.UserTask;
+import ru.scadarnull.project_manager.entity.*;
 
 import java.util.List;
 
@@ -14,4 +13,8 @@ public interface UserTaskRepo extends JpaRepository<UserTask, Long> {
 
     @Query("SELECT ut FROM UserTask ut WHERE ut.user = :user")
     List<UserTask> findUserTaskByUser(@Param("user") User user);
+
+    @Query("SELECT ut FROM UserTask ut WHERE ut.user = :user and ut.task = :task")
+    UserTask findByUserAndTask(@Param("user") User user, @Param("task") Task task);
+
 }
