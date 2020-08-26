@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.scadarnull.project_manager.entity.Project;
-import ru.scadarnull.project_manager.entity.Task;
 import ru.scadarnull.project_manager.entity.User;
 import ru.scadarnull.project_manager.entity.UserProject;
 import ru.scadarnull.project_manager.exceptions.IsExistException;
@@ -28,7 +27,7 @@ public class ProjectController {
 
     @GetMapping("/project")
     public List<Project> list(){
-        return projectService.findAllProjects();
+        return projectService.getAll();
     }
 
     @GetMapping("/project/{id}")
@@ -66,7 +65,7 @@ public class ProjectController {
     }
 
     @GetMapping("/project/{id}/users")
-    public List<User> getUsersByProject(@PathVariable("id") Project project){
+    public List<User> getUsersInProject(@PathVariable("id") Project project){
         if(project == null){
             throw new NotFoundException("Проект не найден");
         }

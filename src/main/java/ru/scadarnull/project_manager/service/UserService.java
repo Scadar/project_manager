@@ -65,12 +65,7 @@ public class UserService implements UserDetailsService {
     }
 
     public boolean userIsExist(User user){
-        return userIsExist(user.getName());
-    }
-
-    public boolean userIsExist(String user){
-        User userFromDb = findByName(user);
-        return userFromDb != null;
+        return findByName(user.getName()) != null;
     }
 
     public User findByName(String name){
@@ -78,7 +73,7 @@ public class UserService implements UserDetailsService {
     }
 
     public List<Task> getTasksByUser(User user) {
-        return taskRepo.findTaskByUser(user);
+        return taskRepo.findTasksByUser(user);
     }
 
     public List<Project> getProjectsByUser(User user) {
@@ -97,6 +92,6 @@ public class UserService implements UserDetailsService {
             }
             return result;
         }
-        throw new NotFoundException("У такого юзера нет этого проекта");
+        throw new NotFoundException("У этого юзера нет этого проекта");
     }
 }

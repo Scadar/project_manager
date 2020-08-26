@@ -18,12 +18,10 @@ import java.util.Map;
 public class TaskController {
 
     private final TaskService taskService;
-    private final ProjectService projectService;
 
     @Autowired
-    public TaskController(TaskService taskService, ProjectService projectService) {
+    public TaskController(TaskService taskService) {
         this.taskService = taskService;
-        this.projectService = projectService;
     }
 
     @GetMapping("/task")
@@ -55,26 +53,14 @@ public class TaskController {
 
     @PutMapping("/task/{id}")
     public Task update(@PathVariable("id") Task taskFromDB,
-                       @RequestBody Task task
+                       @RequestBody Task taskFromRequest
     ){
-        if(task.getName() != null){
-            taskFromDB.setName(task.getName());
-        }
-        if(task.getDescription() != null){
-            taskFromDB.setDescription(task.getDescription());
-        }
-        if(task.getActualEndTime() != null){
-            taskFromDB.setActualEndTime(task.getActualEndTime());
-        }
-        if(task.getState() != null){
-            taskFromDB.setState(task.getState());
-        }
-        taskService.updateTask(taskFromDB);
+        taskService.updateTask(taskFromDB, taskFromRequest);
         return taskFromDB;
     }
 
     @GetMapping("/task/{id}/users")
-    public List<User> getUsersByTask(@PathVariable("id") Task task){
+    public List<User> getUsersInTask(@PathVariable("id") Task task){
         if(task == null){
             throw new NotFoundException("Task не найден");
         }
@@ -106,7 +92,7 @@ public class TaskController {
         if(params.get("time") == null){
             throw new NotValidException("Нет поля time");
         }
-        return taskService.updateUserInTask(user, task, params);
+        return taskService.updateTimeInTask(user, task, params);
     }
 
     @DeleteMapping("/task/{id}")

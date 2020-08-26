@@ -28,6 +28,10 @@ public class TaskService {
         return taskRepo.findAll();
     }
 
+    public List<Task> getAll(User user) {
+        return taskRepo.findTasksByUser(user);
+    }
+
     public Task addTask(Task task, Project project, User user){
         if(!user.getRoles().contains(Role.ADMIN)){
             if(!projectRepo.findProjectsByUser(user).contains(project)){
@@ -56,21 +60,20 @@ public class TaskService {
         taskRepo.delete(task);
     }
 
-    public void updateTask(Task task) {
-        taskRepo.save(task);
-    }
-
-    public Task findByName(String name) {
-        return taskRepo.findByName(name);
-    }
-
-    public boolean taskIsExist(Task task) {
-        return taskIsExist(task.getName());
-    }
-
-    public boolean taskIsExist(String task) {
-        Task taskFromDb = findByName(task);
-        return taskFromDb != null;
+    public void updateTask(Task taskFromDB, Task taskFromRequest) {
+        if(taskFromRequest.getName() != null){
+            taskFromDB.setName(taskFromRequest.getName());
+        }
+        if(taskFromRequest.getDescription() != null){
+            taskFromDB.setDescription(taskFromRequest.getDescription());
+        }
+        if(taskFromRequest.getActualEndTime() != null){
+            taskFromDB.setActualEndTime(taskFromRequest.getActualEndTime());
+        }
+        if(taskFromRequest.getState() != null){
+            taskFromDB.setState(taskFromRequest.getState());
+        }
+        taskRepo.save(taskFromDB);
     }
 
     public List<User> getUsersByTask(Task task) {
@@ -93,10 +96,29 @@ public class TaskService {
         return userTask;
     }
 
-    public UserTask updateUserInTask(User user, Task task, Map<String, String> params) {
+    public UserTask updateTimeInTask(User user, Task task, Map<String, String> params) {
+        if(!user.getRoles().contains(Role.ADMIN)){
+            if(!taskRepo.findTasksByUser(user).contains(task)){
+                throw new ForbiddenException("Это не ваш Таск");
+            }
+        }
         UserTask userTask = userTaskRepo.findByUserAndTask(user, task);
         userTask.setTime(Integer.parseInt(params.get("time")));
         userTaskRepo.save(userTask);
         return userTask;
+    }
+
+    public Task updateStateInTask(User user, Task task, Map<String, String> param){
+        if(!taskRepo.findTasksByUser(user).contains(task)){
+            throw new ForbiddenException("Это не ваш Таск");
+        }
+        if(task.getState().equals(State.UNDER_CONSIDERATION)){
+            throw new ForbiddenException("Вы не можете изменить это состояние");
+        }
+        if(State.valueOf(param.get("state")).equals(State.UNDER_CONSIDERATION)){
+            throw new ForbiddenException("Вы не можете изменить на это состояние");
+        }
+        task.setState(State.valueOf(param.get("state")));
+        return taskRepo.save(task);
     }
 }

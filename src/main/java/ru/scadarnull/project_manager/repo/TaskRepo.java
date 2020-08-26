@@ -14,5 +14,5 @@ public interface TaskRepo extends JpaRepository<Task, Long> {
     Task findByName(String name);
 
     @Query("SELECT ut.task FROM UserTask ut WHERE ut.user = :user")
-    List<Task> findTaskByUser(@Param("user") User user);
+    List<Task> findTasksByUser(@Param("user") User user);
 }

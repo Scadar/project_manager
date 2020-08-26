@@ -90,7 +90,8 @@ public class UserController {
     }
 
     @GetMapping("/user/{userId}/projects/{projectId}/tasks")
-    public List<Task> getTaskByUserAndProject(@PathVariable("userId") User user, @PathVariable("projectId") Project project){
+    public List<Task> getTaskByUserAndProject(@PathVariable("userId") User user,
+                                              @PathVariable("projectId") Project project){
         if(user == null){
             throw new NotFoundException("Пользователь не найден");
         }

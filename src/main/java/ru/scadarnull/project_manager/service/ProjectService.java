@@ -5,7 +5,6 @@ import ru.scadarnull.project_manager.entity.Project;
 import ru.scadarnull.project_manager.entity.TeamRole;
 import ru.scadarnull.project_manager.entity.User;
 import ru.scadarnull.project_manager.entity.UserProject;
-import ru.scadarnull.project_manager.exceptions.NotValidException;
 import ru.scadarnull.project_manager.repo.ProjectRepo;
 import ru.scadarnull.project_manager.repo.UserProjectRepo;
 import ru.scadarnull.project_manager.repo.UserRepo;
@@ -26,8 +25,12 @@ public class ProjectService {
         this.userProjectRepo = userProjectRepo;
     }
 
-    public List<Project> findAllProjects() {
+    public List<Project> getAll() {
         return projectRepo.findAll();
+    }
+
+    public List<Project> getAll(User user) {
+        return projectRepo.findProjectsByUser(user);
     }
 
     public boolean addProject(Project project) {
