@@ -20,7 +20,7 @@ public class Project {
     private String name;
     @NotNull
     private LocalDate startTime;
-
+    private boolean isActive;
     @OneToMany(mappedBy = "project")
     private List<UserProject> userProjects;
 

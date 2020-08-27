@@ -47,6 +47,7 @@ public class UserService implements UserDetailsService {
             return false;
         }
         user.addRole(Role.USER);
+        user.setActive(true);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepo.save(user);
         return true;
@@ -57,7 +58,8 @@ public class UserService implements UserDetailsService {
     }
 
     public void deleteUser(User user) {
-        userRepo.delete(user);
+        user.setActive(false);
+        userRepo.save(user);
     }
 
     public void updateUser(User user) {

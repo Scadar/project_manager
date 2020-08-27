@@ -36,6 +36,7 @@ public class ProjectService {
         if(projectIsExist(project)){
             return false;
         }
+        project.setActive(true);
         projectRepo.save(project);
         return true;
     }
@@ -54,7 +55,8 @@ public class ProjectService {
     }
 
     public void deleteProject(Project project) {
-        projectRepo.delete(project);
+        project.setActive(false);
+        projectRepo.save(project);
     }
 
     public Project findByName(String project) {

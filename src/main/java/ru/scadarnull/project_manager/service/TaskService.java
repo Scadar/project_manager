@@ -35,6 +35,7 @@ public class TaskService {
 
     public Task addTask(Task task, Project project){
         task.setProject(project);
+        task.setActive(true);
         taskRepo.save(task);
         return task;
     }
@@ -57,7 +58,8 @@ public class TaskService {
     }
 
     public void deleteTask(Task task) {
-        taskRepo.delete(task);
+        task.setActive(false);
+        taskRepo.save(task);
     }
 
     public Task updateTask(Task taskFromDB, Task taskFromRequest) {

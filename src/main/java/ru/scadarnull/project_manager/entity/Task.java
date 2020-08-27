@@ -16,14 +16,11 @@ public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-
     @Size(min = 3, max = 30)
     private String name;
-
     private String description;
-
+    private boolean isActive;
     private LocalDate actualEndTime;
-
     @Enumerated(EnumType.STRING)
     @NotNull
     private State state;

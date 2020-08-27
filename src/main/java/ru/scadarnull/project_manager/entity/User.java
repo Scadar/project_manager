@@ -32,6 +32,7 @@ public class User implements UserDetails, Serializable {
     private BigDecimal salary;
     @NotNull
     private String post;
+    private boolean isActive;
 
     @Enumerated(EnumType.STRING)
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
@@ -43,15 +44,6 @@ public class User implements UserDetails, Serializable {
 
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     private List<UserProject> userProjects;
-
-    public User (){}
-
-    public User(String name, String s, BigDecimal bigDecimal, String post) {
-        this.name = name;
-        this.password = s;
-        this.salary = bigDecimal;
-        this.post = post;
-    }
 
     public void addRole(Role role){
         roles.add(role);
@@ -89,6 +81,6 @@ public class User implements UserDetails, Serializable {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return isActive;
     }
 }
