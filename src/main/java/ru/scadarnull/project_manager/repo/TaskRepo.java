@@ -1,5 +1,7 @@
 package ru.scadarnull.project_manager.repo;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -11,8 +13,10 @@ import java.util.List;
 
 @Repository
 public interface TaskRepo extends JpaRepository<Task, Long> {
-    Task findByName(String name);
+
+    Page<Task> findAll(Pageable pageable);
 
     @Query("SELECT ut.task FROM UserTask ut WHERE ut.user = :user")
     List<Task> findTasksByUser(@Param("user") User user);
+
 }

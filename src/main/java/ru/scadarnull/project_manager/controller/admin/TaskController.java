@@ -1,7 +1,10 @@
 package ru.scadarnull.project_manager.controller.admin;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.scadarnull.project_manager.entity.*;
@@ -24,8 +27,8 @@ public class TaskController {
     }
 
     @GetMapping("/task")
-    public List<Task> tasks(){
-        return taskService.getAll();
+    public Page<Task> tasks(@PageableDefault(size = 2, sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable){
+        return taskService.getAll(pageable);
     }
 
     @GetMapping("/task/{id}")

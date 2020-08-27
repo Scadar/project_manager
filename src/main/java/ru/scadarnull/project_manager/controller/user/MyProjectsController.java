@@ -32,8 +32,12 @@ public class MyProjectsController {
     }
 
     @GetMapping("/my_project/task")
-    public List<Task> getMyTasks(@AuthenticationPrincipal User user){
-        return taskService.getAll(user);
+    public List<Task> getMyTasks(@AuthenticationPrincipal User user,
+                                 @RequestParam(required = false) String filter){
+        if(filter == null){
+            return taskService.getAll(user);
+        }
+        return taskService.getAll(user, filter);
     }
 
     @GetMapping("/my_project/project/{projectId}/task")

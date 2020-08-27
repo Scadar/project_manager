@@ -1,13 +1,15 @@
 package ru.scadarnull.project_manager.service;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import ru.scadarnull.project_manager.entity.*;
 import ru.scadarnull.project_manager.exceptions.ForbiddenException;
-import ru.scadarnull.project_manager.exceptions.NotFoundException;
 import ru.scadarnull.project_manager.repo.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class TaskService {
@@ -25,12 +27,17 @@ public class TaskService {
         this.userTaskRepo = userTaskRepo;
     }
 
-    public List<Task> getAll() {
-        return taskRepo.findAll();
+    public Page<Task> getAll(Pageable pageable) {
+        return taskRepo.findAll(pageable);
     }
 
     public List<Task> getAll(User user) {
         return taskRepo.findTasksByUser(user);
+    }
+
+    public List<Task> getAll(User user, String filter) {
+        List<Task> tasks = getAll(user);
+        return tasks.stream().filter(task -> task.getName().contains(filter)).collect(Collectors.toList());
     }
 
     public Task addTask(Task task, Project project){
