@@ -45,6 +45,16 @@ public class User implements UserDetails, Serializable {
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     private List<UserProject> userProjects;
 
+    public User (){}
+
+    public User(String name, String s, BigDecimal bigDecimal, String post, boolean isActive) {
+        this.name = name;
+        this.password = s;
+        this.salary = bigDecimal;
+        this.post = post;
+        this.isActive = isActive;
+    }
+
     public void addRole(Role role){
         roles.add(role);
     }

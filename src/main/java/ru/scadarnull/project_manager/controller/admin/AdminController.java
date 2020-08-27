@@ -21,7 +21,7 @@ public class AdminController {
 
     @GetMapping("/test")
     public User addAdmin(){
-        User admin = new User("admin", "admin", new BigDecimal(0), "admin");
+        User admin = new User("admin", "admin", new BigDecimal(0), "admin", true);
         admin.addRole(Role.ADMIN);
         userService.addUser(admin);
         return admin;
