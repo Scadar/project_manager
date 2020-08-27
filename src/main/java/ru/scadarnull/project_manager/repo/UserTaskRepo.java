@@ -14,6 +14,9 @@ public interface UserTaskRepo extends JpaRepository<UserTask, Long> {
     @Query("SELECT ut FROM UserTask ut WHERE ut.user = :user")
     List<UserTask> findUserTaskByUser(@Param("user") User user);
 
+    @Query("SELECT ut FROM UserTask ut WHERE ut.task = :task")
+    List<UserTask> findUserTaskByTask(@Param("task") Task task);
+
     @Query("SELECT ut FROM UserTask ut WHERE ut.user = :user and ut.task = :task")
     UserTask findByUserAndTask(@Param("user") User user, @Param("task") Task task);
 

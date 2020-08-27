@@ -50,7 +50,8 @@ public class ProjectController {
     }
 
     @PutMapping("/project/{id}")
-    public Project update(@PathVariable("id") Project projectFromDB, @RequestBody Project project){
+    public Project update(@PathVariable("id") Project projectFromDB,
+                          @RequestBody Project project){
         if(projectService.projectIsExist(project) && !projectFromDB.getName().equals(project.getName())){
             throw new IsExistException("Такой проект уже есть");
         }
@@ -74,8 +75,8 @@ public class ProjectController {
 
     @PostMapping("/project/{projectId}/user/{userId}")
     public UserProject getUserInProject(@PathVariable("projectId") Project project,
-                                         @PathVariable("userId") User user,
-                                         @RequestBody Map<String, String> params){
+                                        @PathVariable("userId") User user,
+                                        @RequestBody Map<String, String> params){
         if(project == null){
             throw new NotFoundException("Проект не найден");
         }
@@ -93,8 +94,8 @@ public class ProjectController {
 
     @PutMapping("/project/{projectId}/user/{userId}")
     public UserProject updateUserInProject(@PathVariable("projectId") Project project,
-                                         @PathVariable("userId") User user,
-                                         @RequestBody Map<String, String> params){
+                                           @PathVariable("userId") User user,
+                                           @RequestBody Map<String, String> params){
         if(project == null){
             throw new NotFoundException("Проект не найден");
         }

@@ -3,6 +3,7 @@ package ru.scadarnull.project_manager.service;
 import org.springframework.stereotype.Service;
 import ru.scadarnull.project_manager.entity.*;
 import ru.scadarnull.project_manager.exceptions.ForbiddenException;
+import ru.scadarnull.project_manager.exceptions.NotFoundException;
 import ru.scadarnull.project_manager.repo.*;
 
 import java.util.List;
@@ -32,6 +33,12 @@ public class TaskService {
         return taskRepo.findTasksByUser(user);
     }
 
+    public Task addTask(Task task, Project project){
+        task.setProject(project);
+        taskRepo.save(task);
+        return task;
+    }
+
     public Task addTask(Task task, Project project, User user){
         if(!user.getRoles().contains(Role.ADMIN)){
             if(!projectRepo.findProjectsByUser(user).contains(project)){
@@ -39,20 +46,13 @@ public class TaskService {
             }
             replaceStateIfNotTeamLead(task, project, user);
         }
-        task.setProject(project);
-        taskRepo.save(task);
-        return task;
+        return addTask(task, project);
     }
 
     private void replaceStateIfNotTeamLead(Task task, Project project, User user) {
-        List<UserProject> userProjects = userProjectRepo.findUserProjectByUser(user);
-        for(UserProject up : userProjects){
-            if(up.getProject().equals(project)){
-                if(!up.getTeamRole().equals(TeamRole.TEAM_LEAD)){
-                    task.setState(State.UNDER_CONSIDERATION);
-                    break;
-                }
-            }
+        UserProject userProject = userProjectRepo.findByUserAndProject(user, project);
+        if(!userProject.getTeamRole().equals(TeamRole.TEAM_LEAD)){
+            task.setState(State.UNDER_CONSIDERATION);
         }
     }
 
@@ -60,7 +60,7 @@ public class TaskService {
         taskRepo.delete(task);
     }
 
-    public void updateTask(Task taskFromDB, Task taskFromRequest) {
+    public Task updateTask(Task taskFromDB, Task taskFromRequest) {
         if(taskFromRequest.getName() != null){
             taskFromDB.setName(taskFromRequest.getName());
         }
@@ -73,7 +73,18 @@ public class TaskService {
         if(taskFromRequest.getState() != null){
             taskFromDB.setState(taskFromRequest.getState());
         }
-        taskRepo.save(taskFromDB);
+        return taskRepo.save(taskFromDB);
+    }
+
+    public Task updateTask(Task taskFromDB, Task taskFromRequest, User user) {
+        UserProject userProject = userProjectRepo.findByUserAndProject(user, taskFromDB.getProject());
+        if(userProject == null){
+            throw new ForbiddenException("Это не ваш проект");
+        }
+        if(!userProject.getTeamRole().equals(TeamRole.TEAM_LEAD)){
+            throw new ForbiddenException("Вы не тимлид в этом пректе");
+        }
+        return updateTask(taskFromDB, taskFromRequest);
     }
 
     public List<User> getUsersByTask(Task task) {
@@ -81,19 +92,27 @@ public class TaskService {
     }
 
     public UserTask addUserInTask(User user, Task task) {
-        Project project = task.getProject();
         List<Project> userProjects = projectRepo.findProjectsByUser(user);
-
-        if(!userProjects.contains(project)){
+        if(!userProjects.contains(task.getProject())){
             throw new ForbiddenException("Данный пользователь не состоит в проекте данного таска");
         }
-
         UserTask userTask = new UserTask();
         userTask.setUser(user);
         userTask.setTask(task);
         userTask.setTime(0);
         userTaskRepo.save(userTask);
         return userTask;
+    }
+
+
+    public UserTask addUserInTask(User currentUser, User user, Task task) {
+        if(!currentUser.getRoles().contains(Role.ADMIN)){
+            UserProject up = userProjectRepo.findByUserAndProject(currentUser, task.getProject());
+            if(up == null || !up.getTeamRole().equals(TeamRole.TEAM_LEAD)){
+                throw new ForbiddenException("Вы не тимлид");
+            }
+        }
+        return addUserInTask(user, task);
     }
 
     public UserTask updateTimeInTask(User user, Task task, Map<String, String> params) {
@@ -120,5 +139,9 @@ public class TaskService {
         }
         task.setState(State.valueOf(param.get("state")));
         return taskRepo.save(task);
+    }
+
+    public Integer timesheet(Task task) {
+        return userTaskRepo.findUserTaskByTask(task).stream().mapToInt(UserTask::getTime).sum();
     }
 }

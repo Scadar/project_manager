@@ -3,10 +3,7 @@ package ru.scadarnull.project_manager.controller.user;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import ru.scadarnull.project_manager.entity.Project;
-import ru.scadarnull.project_manager.entity.Task;
-import ru.scadarnull.project_manager.entity.User;
-import ru.scadarnull.project_manager.entity.UserTask;
+import ru.scadarnull.project_manager.entity.*;
 import ru.scadarnull.project_manager.exceptions.NotFoundException;
 import ru.scadarnull.project_manager.exceptions.NotValidException;
 import ru.scadarnull.project_manager.service.ProjectService;
@@ -84,5 +81,45 @@ public class MyProjectsController {
             throw new NotValidException("Нет поля state");
         }
         return taskService.updateStateInTask(user,task, param);
+    }
+
+    @PostMapping("/my_project/user/{userId}/task/{taskId}")
+    public UserTask linkUserAndTask(@AuthenticationPrincipal User currentUser,
+                                    @PathVariable("userId") User user,
+                                    @PathVariable("taskId") Task task){
+        if(task == null){
+            throw new NotFoundException("Task not found");
+        }
+        if(user == null){
+            throw new NotFoundException("User not found");
+        }
+        return taskService.addUserInTask(currentUser, user, task);
+    }
+
+    @PutMapping("/my_project/task/{id}")
+    public Task updateTask( @AuthenticationPrincipal User user,
+                            @PathVariable("id") Task taskFromDB,
+                            @RequestBody Task taskFromRequest
+    ){
+        if(taskFromDB == null){
+            throw new NotFoundException("Task не найден");
+        }
+        return taskService.updateTask(taskFromDB, taskFromRequest, user);
+    }
+
+    @GetMapping("/my_project/task/{id}/timesheet")
+    public Integer timesheetOfTask(@PathVariable("id") Task task){
+        if(task == null){
+            throw new NotFoundException("Task not found");
+        }
+        return taskService.timesheet(task);
+    }
+
+    @GetMapping("/my_project/project/{id}/finished")
+    public Map<State, Integer> statistics(@PathVariable("id") Project project){
+        if(project == null){
+            throw new NotFoundException("Project not found");
+        }
+        return projectService.statistics(project);
     }
 }

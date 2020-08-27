@@ -1,14 +1,13 @@
 package ru.scadarnull.project_manager.service;
 
 import org.springframework.stereotype.Service;
-import ru.scadarnull.project_manager.entity.Project;
-import ru.scadarnull.project_manager.entity.TeamRole;
-import ru.scadarnull.project_manager.entity.User;
-import ru.scadarnull.project_manager.entity.UserProject;
+import ru.scadarnull.project_manager.entity.*;
 import ru.scadarnull.project_manager.repo.ProjectRepo;
 import ru.scadarnull.project_manager.repo.UserProjectRepo;
 import ru.scadarnull.project_manager.repo.UserRepo;
 
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -84,5 +83,20 @@ public class ProjectService {
             userProject.setIsActive(Boolean.valueOf(params.get("isActive")));
         }
         return userProjectRepo.save(userProject);
+    }
+
+    public Map<State, Integer> statistics(Project project) {
+        Map<State, Integer> result = new LinkedHashMap<>();
+
+        for(Task task : project.getTasks()){
+            switch (task.getState()){
+                case UNDER_CONSIDERATION: result.merge(State.UNDER_CONSIDERATION, 1, Integer::sum); break;
+                case COMPLETED: result.merge(State.COMPLETED, 1, Integer::sum); break;
+                case IN_WORK: result.merge(State.IN_WORK, 1, Integer::sum); break;
+                case CONFIRMED: result.merge(State.CONFIRMED, 1, Integer::sum); break;
+            }
+        }
+
+        return result;
     }
 }

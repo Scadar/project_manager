@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.*;
 import ru.scadarnull.project_manager.entity.*;
 import ru.scadarnull.project_manager.exceptions.NotFoundException;
 import ru.scadarnull.project_manager.exceptions.NotValidException;
-import ru.scadarnull.project_manager.service.ProjectService;
 import ru.scadarnull.project_manager.service.TaskService;
 
 import javax.validation.Valid;
@@ -38,8 +37,7 @@ public class TaskController {
     }
 
     @PostMapping("/task/project/{projectId}")
-    public Task create(@AuthenticationPrincipal User user,
-                       @RequestBody @Valid Task task,
+    public Task create(@RequestBody @Valid Task task,
                        @PathVariable("projectId") Project project,
                        BindingResult bindingResult){
         if(bindingResult.hasErrors()){
@@ -48,15 +46,17 @@ public class TaskController {
         if(project == null){
             throw new NotFoundException("Проект не найден");
         }
-        return taskService.addTask(task, project, user);
+        return taskService.addTask(task, project);
     }
 
     @PutMapping("/task/{id}")
     public Task update(@PathVariable("id") Task taskFromDB,
                        @RequestBody Task taskFromRequest
     ){
-        taskService.updateTask(taskFromDB, taskFromRequest);
-        return taskFromDB;
+        if(taskFromDB == null){
+            throw new NotFoundException("Task не найден");
+        }
+        return taskService.updateTask(taskFromDB, taskFromRequest);
     }
 
     @GetMapping("/task/{id}/users")
