@@ -131,7 +131,7 @@ public class TaskService {
             }
         }
         UserTask userTask = userTaskRepo.findByUserAndTask(user, task);
-        userTask.setTime(Integer.parseInt(params.get("time")));
+        userTask.setTime(userTask.getTime() + Integer.parseInt(params.get("time")));
         userTaskRepo.save(userTask);
         return userTask;
     }
