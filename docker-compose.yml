@@ -1,0 +1,19 @@
+version: '3.7'
+
+services:
+  my-database:
+    image: mysql:5.7
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=testdb
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=root
+      - MYSQL_ONETIME_PASSWORD=true
+  project-manager:
+    image: newapp:v1
+    restart: always
+    ports:
+    - 8080:8080
+    depends_on:
+      - my-database
