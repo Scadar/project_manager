@@ -1,9 +1,14 @@
 version: '3.7'
 
+volumes:
+  mysql_volume:
+
 services:
   my-database:
     image: mysql:5.7
     restart: always
+    volumes:
+    - mysql_volume:/var/lib/mysql
     environment:
       - MYSQL_ROOT_PASSWORD=root
       - MYSQL_DATABASE=testdb
